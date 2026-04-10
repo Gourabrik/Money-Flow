@@ -1,14 +1,14 @@
-# Money Flow 5.0
+# Money Flow
 
 ## A Modern Personal Finance Dashboard
 
-Money Flow 5.0 is a polished browser-based solution for personal financial management. Designed to deliver fast, secure tracking for expenses, income, savings, and goals, it keeps all data locally in the browser and removes the need for server-side infrastructure.
+Money Flow is a polished browser-based solution for personal financial management. Designed to deliver fast, secure tracking for expenses, income, savings, and goals, it keeps all data locally in the browser and removes the need for server-side infrastructure.
 
 This project combines a clean interface with built-in analytics, visual reporting, and a lightweight architecture that makes it ideal for individuals seeking an accessible expense tracker without backend complexity.
 
 ## Table of Contents
 
-- [Money Flow 5.0](#money-flow-50)
+- [Money Flow ](#money-flow)
   - [A Modern Personal Finance Dashboard](#a-modern-personal-finance-dashboard)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
@@ -24,7 +24,7 @@ This project combines a clean interface with built-in analytics, visual reportin
 
 ## Overview
 
-Money Flow 5.0 provides a clear and responsive interface for personal finance management. The application enables users to record expenses, segment income sources, and visualize spending trends with charts and calendar heatmaps.
+Money Flow provides a clear and responsive interface for personal finance management. The application enables users to record expenses, segment income sources, and visualize spending trends with charts and calendar heatmaps.
 
 The core value is simplicity: no server setup, no external database, and a fast, self-contained experience for individual users.
 
