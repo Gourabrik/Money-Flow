@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Chart Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full">
+        <h1 class="text-3xl font-bold text-center mb-8 text-purple-700">Savings Chart Test</h1>
+        
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Savings Analysis</h2>
+            <div class="bg-purple-50 rounded-lg p-6">
+                <canvas id="savings-chart" height="320"></canvas>
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <button id="add-test-data" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-full transition-colors">
+                Add Test Data
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize chart
+        let savingsChartInstance = null;
+        
+        // Sample test data
+        const testData = [
+            { date: '2023-01-01', amount: 1000, type: 'savings-add' },
+            { date: '2023-01-05', amount: 500, type: 'savings-add' },
+            { date: '2023-01-10', amount: 200, type: 'savings-withdraw' },
+            { date: '2023-01-15', amount: 1500, type: 'savings-add' },
+            { date: '2023-01-20', amount: 300, type: 'savings-withdraw' },
+            { date: '2023-01-25', amount: 1200, type: 'savings-add' }
+        ];
+        
+        function updateSavingsChart() {
+            const savingsChartElement = document.getElementById('savings-chart');
+            
+            // Destroy previous chart if exists
+            if (savingsChartInstance) {
+                savingsChartInstance.destroy();
+            }
+            
+            // Prepare chart data
+            const labels = testData.map(item => {
+                const date = new Date(item.date);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            });
+            
+            const data = testData.map(item => {
+                if (item.type === 'savings-add') return item.amount;
+                if (item.type === 'savings-withdraw') return -item.amount;
+                return item.amount || 0;
+            });
+            
+            // Calculate cumulative savings
+            let cumulativeData = [];
+            let cumulativeSum = 0;
+            data.forEach(value => {
+                cumulativeSum += value;
+                cumulativeData.push(cumulativeSum);
+            });
+            
+            // Create chart
+            savingsChartInstance = new Chart(savingsChartElement, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Savings Over Time',
+                        data: cumulativeData,
+                        borderColor: '#7C3AED',
+                        backgroundColor: 'rgba(124,58,237,0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#10B981',
+                        pointBorderColor: '#7C3AED',
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: '#F59E0B',
+                        pointHoverBorderColor: '#7C3AED',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    animation: {
+                        duration: 1200,
+                        easing: 'easeOutBounce'
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '₹' + context.parsed.y.toFixed(2);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            display: true, 
+                            title: { display: true, text: 'Date' },
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        },
+                        y: { 
+                            display: true, 
+                            title: { display: true, text: 'Amount (₹)' }, 
+                            beginAtZero: true 
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Add test data button event
+        document.getElementById('add-test-data').addEventListener('click', function() {
+            updateSavingsChart();
+        });
+        
+        // Initialize chart on load
+        window.addEventListener('load', function() {
+            updateSavingsChart();
+        });
+    </script>
+</body>
+</html>

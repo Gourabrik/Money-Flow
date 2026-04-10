@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Savings Chart Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 min-h-screen py-8">
+    <!-- Animated background elements -->
+    <div class="background-animation">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 max-w-6xl relative z-10">
+        <!-- Header -->
+        <div class="header-container text-center mb-12 animate-fade-in">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+                Enhanced Savings Chart Demo
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Experience the improved savings analysis with smooth animations, better UI, and enhanced user feedback.
+            </p>
+        </div>
+
+        <!-- Demo Controls -->
+        <div class="glass-card p-6 mb-8 animate-fade-in">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-cogs text-purple-500"></i> Demo Controls
+            </h2>
+            <div class="flex gap-4 flex-wrap justify-center">
+                <button id="add-sample-data" class="btn btn-success flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Add Sample Data
+                </button>
+                <button id="clear-data" class="btn btn-danger flex items-center gap-2">
+                    <i class="fas fa-trash"></i> Clear Data
+                </button>
+                <button id="simulate-transaction" class="btn btn-primary flex items-center gap-2">
+                    <i class="fas fa-magic"></i> Simulate Transaction
+                </button>
+                <button id="test-animations" class="btn btn-secondary flex items-center gap-2">
+                    <i class="fas fa-play"></i> Test Animations
+                </button>
+            </div>
+        </div>
+        
+        <!-- Enhanced Savings Section -->
+        <div class="glass-card savings-box mb-8 p-8 flex flex-col items-center justify-center relative animate-fade-in" id="savings-section">
+            <h2 class="savings-title font-bold mb-6 flex items-center gap-4 animate-bounce" style="font-size:2.5rem;">
+                <i class="fas fa-piggy-bank text-yellow-400 piggy-bank-bounce" style="font-size:2.5rem;"></i> Enhanced Savings
+            </h2>
+            <span id="savings-balance" class="balance-counter font-extrabold animate-pulse mb-6" style="font-size:2rem;">Savings Balance: ₹0.00</span>
+            
+            <div class="flex gap-6 mb-6 w-full justify-center flex-wrap">
+                <div class="flex flex-col items-center">
+                    <input type="number" id="add-savings-amount" class="px-5 py-3 rounded-full border border-pink-300 focus:ring-2 focus:ring-pink-500 transition-all duration-300 text-lg w-40 mb-2 text-center" placeholder="Amount to Add">
+                    <button id="add-savings-btn" class="btn btn-success w-40 text-lg flex items-center justify-center gap-2" style="width: 200px;">
+                        <i class="fas fa-plus"></i> Add Savings
+                    </button>
+                </div>
+                <div class="flex flex-col items-center">
+                    <input type="number" id="withdraw-savings-amount" class="px-5 py-3 rounded-full border border-red-300 focus:ring-2 focus:ring-red-500 transition-all duration-300 text-lg w-40 mb-2 text-center" placeholder="Amount to Withdraw">
+                    <button id="withdraw-savings-btn" class="btn btn-danger w-40 text-lg flex items-center justify-center gap-2" style="width: 200px;">
+                        <i class="fas fa-minus"></i> Withdraw
+                    </button>
+                </div>
+            </div>
+            
+            <div id="savings-message" class="text-red-500 text-center mb-4 text-lg"></div>
+            
+            <div class="w-full mt-6 flex flex-col items-center">
+                <h3 class="font-semibold text-gray-700 mb-4 flex items-center gap-2 text-xl">
+                    <i class="fas fa-chart-line text-purple-500"></i> Enhanced Savings Analysis
+                </h3>
+                <div class="savings-chart-container w-full">
+                    <canvas id="savings-chart" class="savings-chart-canvas" height="320" style="max-width: 95%;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Highlights -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card p-6 animate-fade-in">
+                <div class="text-center">
+                    <i class="fas fa-sparkles text-4xl text-yellow-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Smooth Animations</h3>
+                    <p class="text-gray-600">Enhanced chart animations with easeOutCubic easing and completion effects.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 animate-fade-in">
+                <div class="text-center">
+                    <i class="fas fa-palette text-4xl text-purple-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Beautiful UI</h3>
+                    <p class="text-gray-600">Gradient backgrounds, glass morphism effects, and improved visual hierarchy.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 animate-fade-in">
+                <div class="text-center">
+                    <i class="fas fa-chart-line text-4xl text-green-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Enhanced Data</h3>
+                    <p class="text-gray-600">Better data processing, error handling, and interactive tooltips.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg transform transition-all duration-300 translate-x-full opacity-0">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-check-circle"></i>
+            <span id="toast-message">Operation successful!</span>
+        </div>
+    </div>
+
+    <script>
+        // Initialize demo variables
+        let savings = 0;
+        let savingsChartInstance = null;
+        
+        // DOM Elements
+        const elements = {
+            savingsBalance: document.getElementById('savings-balance'),
+            addSavingsAmount: document.getElementById('add-savings-amount'),
+            withdrawSavingsAmount: document.getElementById('withdraw-savings-amount'),
+            addSavingsBtn: document.getElementById('add-savings-btn'),
+            withdrawSavingsBtn: document.getElementById('withdraw-savings-btn'),
+            savingsMessage: document.getElementById('savings-message'),
+            savingsChart: document.getElementById('savings-chart'),
+            toast: document.getElementById('toast'),
+            toastMessage: document.getElementById('toast-message')
+        };
+
+        // Sample data for demonstration
+        const sampleSavingsData = [
+            { date: '2024-01-01', amount: 1000, type: 'savings-add', description: 'New Year savings goal' },
+            { date: '2024-01-05', amount: 500, type: 'savings-add', description: 'Weekly savings' },
+            { date: '2024-01-10', amount: 200, type: 'savings-withdraw', description: 'Emergency expense' },
+            { date: '2024-01-15', amount: 1500, type: 'savings-add', description: 'Bonus money' },
+            { date: '2024-01-20', amount: 300, type: 'savings-withdraw', description: 'Gift purchase' },
+            { date: '2024-01-25', amount: 1200, type: 'savings-add', description: 'Investment return' },
+            { date: '2024-01-30', amount: 800, type: 'savings-add', description: 'Month-end savings' }
+        ];
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            elements.toast.className = `fixed top-4 right-4 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full opacity-0 flex items-center gap-2`;
+            elements.toastMessage.textContent = message;
+            
+            setTimeout(() => {
+                elements.toast.classList.remove('translate-x-full', 'opacity-0');
+                elements.toast.classList.add('-translate-x-0', 'opacity-100');
+            }, 100);
+            
+            setTimeout(() => {
+                elements.toast.classList.remove('-translate-x-0', 'opacity-100');
+                elements.toast.classList.add('translate-x-full', 'opacity-0');
+            }, 3000);
+        }
+
+        // Demo control functions
+        function addSampleData() {
+            localStorage.setItem('savingsHistory', JSON.stringify(sampleSavingsData));
+            savings = sampleSavingsData.reduce((total, item) => {
+                return total + (item.type === 'savings-add' ? item.amount : -item.amount);
+            }, 0);
+            updateSavingsUI();
+            showToast('Sample data added successfully!');
+        }
+
+        function clearData() {
+            localStorage.removeItem('savingsHistory');
+            savings = 0;
+            updateSavingsUI();
+            showToast('All data cleared!', 'error');
+        }
+
+        function simulateTransaction() {
+            const amounts = [100, 250, 500, 750, 1000];
+            const types = ['savings-add', 'savings-withdraw'];
+            const descriptions = ['Random transaction', 'Demo savings', 'Test withdrawal', 'Sample deposit'];
+            
+            const amount = amounts[Math.floor(Math.random() * amounts.length)];
+            const type = types[Math.floor(Math.random() * types.length)];
+            const description = descriptions[Math.floor(Math.random() * descriptions.length)];
+            
+            let savingsHistory = JSON.parse(localStorage.getItem('savingsHistory')) || [];
+            savingsHistory.push({
+                date: new Date().toISOString().split('T')[0],
+                amount: amount,
+                type: type,
+                description: description
+            });
+            
+            localStorage.setItem('savingsHistory', JSON.stringify(savingsHistory));
+            savings += (type === 'savings-add' ? amount : -amount);
+            
+            updateSavingsUI();
+            showToast(`${type === 'savings-add' ? 'Added' : 'Withdrew'} ₹${amount}!`);
+        }
+
+        function testAnimations() {
+            // Add celebration animation to the piggy bank
+            const piggyBank = document.querySelector('.fa-piggy-bank');
+            piggyBank.classList.add('celebrate-animation');
+            
+            // Add sparkle effect
+            showSavingsSparkle();
+            
+            // Animate balance counter
+            elements.savingsBalance.classList.add('balance-counter');
+            
+            setTimeout(() => {
+                piggyBank.classList.remove('celebrate-animation');
+                elements.savingsBalance.classList.remove('balance-counter');
+            }, 1000);
+            
+            showToast('Animation test completed!');
+        }
+
+        // Event listeners for demo controls
+        document.getElementById('add-sample-data').addEventListener('click', addSampleData);
+        document.getElementById('clear-data').addEventListener('click', clearData);
+        document.getElementById('simulate-transaction').addEventListener('click', simulateTransaction);
+        document.getElementById('test-animations').addEventListener('click', testAnimations);
+
+        // Savings functionality
+        elements.addSavingsBtn.addEventListener('click', () => {
+            const amount = parseFloat(elements.addSavingsAmount.value);
+            if (isNaN(amount) || amount <= 0) {
+                elements.savingsMessage.textContent = 'Please enter a valid amount to add.';
+                return;
+            }
+            
+            savings += amount;
+            
+            let savingsHistory = JSON.parse(localStorage.getItem('savingsHistory')) || [];
+            savingsHistory.push({
+                date: new Date().toISOString().split('T')[0],
+                amount: amount,
+                type: 'savings-add',
+                description: `Added ₹${amount.toFixed(2)} to savings`
+            });
+            localStorage.setItem('savingsHistory', JSON.stringify(savingsHistory));
+            
+            updateSavingsUI();
+            elements.addSavingsAmount.value = '';
+            elements.savingsMessage.textContent = `₹${amount.toFixed(2)} added to savings.`;
+            showToast(`₹${amount.toFixed(2)} added to savings!`);
+        });
+
+        elements.withdrawSavingsBtn.addEventListener('click', () => {
+            const amount = parseFloat(elements.withdrawSavingsAmount.value);
+            if (isNaN(amount) || amount <= 0) {
+                elements.savingsMessage.textContent = 'Please enter a valid amount to withdraw.';
+                return;
+            }
+            if (amount > savings) {
+                elements.savingsMessage.textContent = 'Insufficient savings balance.';
+                return;
+            }
+            
+            savings -= amount;
+            
+            let savingsHistory = JSON.parse(localStorage.getItem('savingsHistory')) || [];
+            savingsHistory.push({
+                date: new Date().toISOString().split('T')[0],
+                amount: amount,
+                type: 'savings-withdraw',
+                description: `Withdrawn ₹${amount.toFixed(2)} from savings`
+            });
+            localStorage.setItem('savingsHistory', JSON.stringify(savingsHistory));
+            
+            updateSavingsUI();
+            elements.withdrawSavingsAmount.value = '';
+            elements.savingsMessage.textContent = `₹${amount.toFixed(2)} withdrawn from savings.`;
+            showToast(`₹${amount.toFixed(2)} withdrawn from savings!`);
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            updateSavingsUI();
+            showToast('Enhanced Savings Chart Demo loaded!');
+        });
+    </script>
+    
+    <!-- Include the enhanced savings chart script -->
+    <script src="enhanced_savings_chart.js"></script>
+</body>
+</html>

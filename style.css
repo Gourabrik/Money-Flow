@@ -1,0 +1,1484 @@
+:root {
+    /* Dark Theme Color Palette */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-card: #252525;
+    --bg-elevated: #333333;
+    --bg-input: #3d3d3d;
+
+    /* Accent Colors */
+    --accent-yellow: #FFD700;
+    --accent-yellow-hover: #ffde33;
+    --accent-yellow-dim: rgba(255, 215, 0, 0.1);
+
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --text-muted: #666666;
+    --text-dark: #1a1a1a;
+
+    /* Status Colors */
+    --success-color: #22c55e;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #3b82f6;
+
+    /* Gradients */
+    --gradient-yellow: linear-gradient(135deg, #FFD700, #FFA500);
+    --gradient-success: linear-gradient(135deg, #22c55e, #16a34a);
+    --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
+    --gradient-info: linear-gradient(135deg, #3b82f6, #2563eb);
+
+    /* Category Colors */
+    --cat-food: #ff6b6b;
+    --cat-travel: #4ecdc4;
+    --cat-shopping: #a855f7;
+    --cat-bills: #f59e0b;
+    --cat-entertainment: #ec4899;
+    --cat-healthcare: #22c55e;
+    --cat-other: #6366f1;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-yellow: 0 4px 20px rgba(255, 215, 0, 0.3);
+
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 50px;
+
+    /* Bottom Nav Height */
+    --bottom-nav-height: 70px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    padding-bottom: calc(var(--bottom-nav-height) + 20px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide background animation for dark theme */
+.background-animation {
+    display: none;
+}
+
+/* ============================================
+   TOP NAVIGATION BAR
+   ============================================ */
+nav.fixed {
+    background: var(--bg-primary) !important;
+    border-bottom: 1px solid var(--bg-elevated) !important;
+    padding-top: 0 !important;
+}
+
+nav .text-gray-700,
+nav .hover\:text-gray-900,
+#menu-btn {
+    color: var(--text-primary) !important;
+}
+
+nav h1 {
+    background: var(--gradient-yellow) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    font-size: 2.5rem !important;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 10px rgba(255, 215, 0, 0.1);
+    padding: 5px 0;
+    line-height: 1.2;
+}
+
+/* ============================================
+   SIDE NAVIGATION MENU
+   ============================================ */
+#nav-menu {
+    background: var(--bg-secondary) !important;
+    border-right: 1px solid var(--bg-elevated);
+}
+
+#nav-menu h2,
+#nav-menu span {
+    color: var(--text-primary) !important;
+}
+
+#nav-menu a {
+    color: var(--text-primary) !important;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+
+#nav-menu a:hover {
+    background: var(--bg-elevated) !important;
+}
+
+#nav-menu .border-t {
+    border-color: var(--bg-elevated) !important;
+}
+
+#logout-btn {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: var(--danger-color) !important;
+    border: none !important;
+}
+
+#logout-btn:hover {
+    background: rgba(239, 68, 68, 0.2) !important;
+}
+
+/* ============================================
+   BOTTOM NAVIGATION BAR
+   ============================================ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--bottom-nav-height);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--bg-elevated);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    padding: 0 10px;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+    min-width: 60px;
+}
+
+.bottom-nav-item i {
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+}
+
+.bottom-nav-item.active,
+.bottom-nav-item:hover {
+    color: var(--accent-yellow);
+}
+
+.bottom-nav-item.active {
+    background: var(--accent-yellow-dim);
+}
+
+/* FAB Button in Bottom Nav */
+.fab-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-yellow);
+    color: var(--text-dark);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: bold;
+    box-shadow: var(--shadow-yellow);
+    transition: all 0.2s ease;
+    margin-top: -28px;
+}
+
+.fab-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(255, 215, 0, 0.5);
+}
+
+.fab-button:active {
+    transform: scale(0.95);
+}
+
+/* Hide old floating button */
+.floating-button {
+    display: none !important;
+}
+
+/* ============================================
+   GLASS CARD - DARK THEME
+   ============================================ */
+.glass-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--bg-elevated);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+}
+
+/* Remove gradient overlays on cards */
+.glass-card .absolute.inset-0 {
+    display: none !important;
+}
+
+/* ============================================
+   TYPOGRAPHY - DARK THEME
+   ============================================ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-primary);
+}
+
+p,
+span,
+label {
+    color: var(--text-secondary);
+}
+
+.text-gray-500,
+.text-gray-600,
+.text-gray-700,
+.text-gray-800 {
+    color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   BUTTONS - DARK THEME
+   ============================================ */
+.btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-height: 44px;
+    /* Touch target */
+}
+
+.btn-primary {
+    background: var(--accent-yellow);
+    color: var(--text-dark);
+    box-shadow: var(--shadow-yellow);
+}
+
+.btn-primary:hover {
+    background: var(--accent-yellow-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--bg-input);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-elevated);
+}
+
+.btn-success {
+    background: var(--gradient-success);
+    color: white;
+}
+
+.btn-success:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: var(--gradient-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   TAB BUTTONS - DARK THEME
+   ============================================ */
+.tab-button,
+.analytics-tab-button,
+.debt-savings-tab {
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    border: 1px solid var(--bg-elevated);
+    padding: 10px 16px;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+    margin: 4px;
+}
+
+.tab-button:hover,
+.analytics-tab-button:hover,
+.debt-savings-tab:hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.tab-button.active,
+.analytics-tab-button.active,
+.debt-savings-tab.active {
+    background: var(--accent-yellow) !important;
+    color: var(--text-dark) !important;
+    border-color: var(--accent-yellow) !important;
+    box-shadow: var(--shadow-yellow);
+}
+
+/* Tab container styling */
+.glass-card>.flex.flex-wrap,
+.glass-card>.flex.justify-center {
+    background: var(--bg-secondary);
+    padding: 12px;
+    margin: -1px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* ============================================
+   FORM INPUTS - DARK THEME
+   ============================================ */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--bg-elevated) !important;
+    border-radius: var(--radius-full);
+    padding: 12px 16px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-yellow) !important;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Date input styling for dark theme */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+select option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* ============================================
+   MODALS - DARK THEME
+   ============================================ */
+.modal {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(4px);
+}
+
+.modal .glass-card {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--bg-elevated);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal h2 {
+    color: var(--text-primary) !important;
+}
+
+.modal label {
+    color: var(--text-secondary) !important;
+}
+
+/* Modal buttons - ensure visibility */
+.modal button[type="button"],
+.modal .btn-secondary,
+.modal .bg-gray-200 {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--bg-elevated) !important;
+}
+
+.modal button[type="button"]:hover,
+.modal .btn-secondary:hover {
+    background: var(--bg-elevated) !important;
+}
+
+.modal button[type="submit"],
+.modal .btn-primary {
+    background: var(--accent-yellow) !important;
+    color: var(--text-dark) !important;
+}
+
+/* Income type buttons in modal */
+#online-income-btn,
+#cash-income-btn {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border: 2px solid transparent !important;
+}
+
+#online-income-btn.active,
+#online-income-btn:focus {
+    background: var(--info-color) !important;
+    color: white !important;
+    border-color: var(--info-color) !important;
+}
+
+#cash-income-btn.active,
+#cash-income-btn:focus {
+    background: var(--success-color) !important;
+    color: white !important;
+    border-color: var(--success-color) !important;
+}
+
+/* ============================================
+   EXPENSE CARDS - DARK THEME
+   ============================================ */
+.expense-card {
+    background: var(--bg-elevated);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.expense-card:hover {
+    background: var(--bg-input);
+    transform: none;
+}
+
+/* ============================================
+   CATEGORY BADGES - DARK THEME
+   ============================================ */
+.category-badge {
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+}
+
+.category-Food {
+    background: var(--cat-food);
+    color: white;
+}
+
+.category-Travel {
+    background: var(--cat-travel);
+    color: white;
+}
+
+.category-Shopping {
+    background: var(--cat-shopping);
+    color: white;
+}
+
+.category-Bills {
+    background: var(--cat-bills);
+    color: var(--text-dark);
+}
+
+.category-Entertainment {
+    background: var(--cat-entertainment);
+    color: white;
+}
+
+.category-Healthcare {
+    background: var(--cat-healthcare);
+    color: white;
+}
+
+.category-Other {
+    background: var(--cat-other);
+    color: white;
+}
+
+/* ============================================
+   BALANCE SECTION - DARK THEME
+   ============================================ */
+#balance-amount {
+    color: var(--accent-yellow) !important;
+    font-size: 2rem !important;
+}
+
+#income-display .text-blue-600 {
+    color: var(--info-color) !important;
+}
+
+#income-display .text-green-600 {
+    color: var(--success-color) !important;
+}
+
+/* ============================================
+   DEBT & SAVINGS SECTIONS
+   ============================================ */
+#total-debt {
+    color: var(--danger-color) !important;
+}
+
+#savings-balance {
+    color: var(--success-color) !important;
+}
+
+/* Background overlays in debt/savings */
+.bg-gradient-to-r {
+    background: var(--bg-elevated) !important;
+}
+
+.from-red-50,
+.to-orange-50,
+.from-purple-50,
+.to-pink-50,
+.bg-pink-50,
+.bg-purple-50,
+.bg-orange-50,
+.bg-yellow-50,
+.bg-red-50,
+.bg-green-50,
+.bg-blue-50 {
+    background: var(--bg-elevated) !important;
+}
+
+/* ============================================
+   CHARTS - DARK THEME
+   ============================================ */
+.chart-container {
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-top: 16px;
+}
+
+/* ============================================
+   HEATMAP CALENDAR - DARK THEME
+   ============================================ */
+.heatmap-calendar {
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.heatmap-weekdays div {
+    color: var(--text-secondary) !important;
+}
+
+.heatmap-day {
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    border: 1px solid var(--bg-elevated);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+}
+
+.heatmap-day.empty {
+    background: var(--bg-secondary);
+}
+
+.heatmap-day.today {
+    border: 2px solid var(--accent-yellow);
+    color: var(--accent-yellow);
+}
+
+/* Heatmap colors remain visible */
+.heatmap-day.level-1 {
+    background: #1e3a2f;
+    color: #22c55e;
+}
+
+.heatmap-day.level-2 {
+    background: #2f4a3f;
+    color: #22c55e;
+}
+
+.heatmap-day.level-3 {
+    background: #3d3820;
+    color: #fbbf24;
+}
+
+.heatmap-day.level-4 {
+    background: #4a4020;
+    color: #fbbf24;
+}
+
+.heatmap-day.level-5 {
+    background: #5a3520;
+    color: #f97316;
+}
+
+.heatmap-day.level-6 {
+    background: #4a2020;
+    color: #ef4444;
+}
+
+/* ============================================
+   TABLES - DARK THEME
+   ============================================ */
+table {
+    background: var(--bg-elevated) !important;
+}
+
+thead {
+    background: var(--bg-input) !important;
+}
+
+th {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+}
+
+td {
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid var(--bg-elevated) !important;
+}
+
+tbody tr:hover {
+    background: var(--bg-input) !important;
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS - DARK THEME
+   ============================================ */
+/* Toast styles handled by Tailwind classes in script.js */
+
+/* ============================================
+   PROGRESS BARS - DARK THEME
+   ============================================ */
+.progress-bar-container {
+    background: var(--bg-input);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.5s ease;
+}
+
+/* ============================================
+   GOALS & ACHIEVEMENTS
+   ============================================ */
+#achievements {
+    background: rgba(255, 215, 0, 0.1) !important;
+    border-color: var(--accent-yellow) !important;
+}
+
+#achievements h4 {
+    color: var(--accent-yellow) !important;
+}
+
+/* ============================================
+   PAYMENT METHOD TOGGLE
+   ============================================ */
+.payment-method-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.payment-method-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: var(--radius-full);
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    border: 2px solid transparent;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.payment-method-btn:hover {
+    background: var(--bg-elevated);
+}
+
+.payment-method-btn.active {
+    border-color: var(--accent-yellow);
+    background: var(--accent-yellow-dim);
+    color: var(--accent-yellow);
+}
+
+.payment-method-btn.online.active {
+    border-color: var(--info-color);
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info-color);
+}
+
+.payment-method-btn.cash.active {
+    border-color: var(--success-color);
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+}
+
+/* ============================================
+   SCROLLBAR - DARK THEME
+   ============================================ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-elevated);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px;
+    }
+
+    nav.fixed {
+        padding: 12px 16px !important;
+    }
+
+    /* nav h1 font-size rule removed to keep constant size */
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .glass-card {
+        border-radius: var(--radius-md);
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    .glass-card>div {
+        padding: 16px !important;
+    }
+
+    .tab-button,
+    .analytics-tab-button,
+    .debt-savings-tab {
+        padding: 8px 12px;
+        font-size: 0.7rem;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    #balance-amount {
+        font-size: 1.75rem !important;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+    }
+
+    /* Modal mobile adjustments */
+    .modal .glass-card {
+        margin: 16px;
+        max-width: calc(100vw - 32px);
+    }
+
+    /* Grid adjustments for mobile */
+    .grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .grid.grid-cols-1.md\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ============================================
+   UTILITY OVERRIDES FOR DARK THEME
+   ============================================ */
+.bg-white,
+.bg-gray-50,
+.bg-gray-100 {
+    background: var(--bg-card) !important;
+}
+
+.border-gray-200,
+.border-gray-300,
+.border-white\/20 {
+    border-color: var(--bg-elevated) !important;
+}
+
+.text-pink-500,
+.text-pink-600 {
+    color: var(--accent-yellow) !important;
+}
+
+.text-purple-500,
+.text-purple-600 {
+    color: #a855f7 !important;
+}
+
+.from-pink-50,
+.to-blue-50,
+.from-pink-500,
+.to-purple-500 {
+    background: var(--bg-primary) !important;
+}
+
+/* Confirm/Cancel button fixes for dialogs */
+button:contains("Cancel"),
+button:contains("Confirm"),
+.bg-gray-200.hover\\:bg-gray-300 {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Ensure all interactive elements are visible */
+button,
+a,
+input,
+select,
+textarea {
+    -webkit-tap-highlight-color: rgba(255, 215, 0, 0.2);
+}
+
+/* Fix for any remaining white backgrounds */
+[class*="bg-white"],
+[class*="bg-gray-"] {
+    background-color: var(--bg-card) !important;
+}
+
+/* Ensure text is visible */
+[class*="text-gray-"] {
+    color: var(--text-secondary) !important;
+}
+
+/* Strong text should be white */
+.font-bold,
+.font-semibold {
+    color: var(--text-primary);
+}
+
+/* ============================================
+   AI ANALYSIS SECTION
+   ============================================ */
+#ai-analysis-content {
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    min-height: 200px;
+}
+
+/* ============================================
+   MONTH PICKER / DATE PICKER DIALOGS
+   ============================================ */
+.month-picker,
+.date-picker {
+    background: var(--bg-secondary) !important;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--bg-elevated);
+}
+
+.month-picker button,
+.date-picker button {
+    color: var(--text-primary) !important;
+}
+
+.month-picker .selected,
+.date-picker .selected {
+    background: var(--accent-yellow) !important;
+    color: var(--text-dark) !important;
+}
+
+/* Generic dialog/popup fixes */
+[role="dialog"],
+[role="alertdialog"],
+.popup,
+.dialog {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* ============================================
+   CATEGORY GRID
+   ============================================ */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 4px;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    scrollbar-width: thin;
+    scrollbar-color: var(--bg-input) var(--bg-elevated);
+}
+
+.category-grid::-webkit-scrollbar {
+    width: 4px;
+}
+
+.category-grid::-webkit-scrollbar-thumb {
+    background: var(--bg-input);
+    border-radius: 2px;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 4px;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 70px;
+}
+
+.category-item i {
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+    transition: transform 0.2s ease;
+}
+
+.category-item span {
+    font-size: 0.65rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.category-item:hover {
+    background: var(--bg-input);
+    color: var(--text-primary);
+}
+
+.category-item:active {
+    transform: scale(0.9);
+}
+
+.category-item.active {
+    background: var(--accent-yellow-dim);
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
+}
+
+.category-item.active i {
+    color: var(--accent-yellow);
+}
+
+/* ============================================
+   PAYMENT METHOD BUTTON ANIMATIONS
+   ============================================ */
+.payment-method-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: var(--radius-full);
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    border: 2px solid transparent;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.payment-method-btn:hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.payment-method-btn:active {
+    transform: scale(0.95);
+}
+
+.payment-method-btn.active {
+    transform: scale(1);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.payment-method-btn.online.active {
+    border-color: var(--info-color);
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--info-color);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+.payment-method-btn.cash.active {
+    border-color: var(--success-color);
+    background: rgba(34, 197, 94, 0.2);
+    color: var(--success-color);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+}
+
+/* ============================================
+   EXPENSE NOTE TEXTAREA
+   ============================================ */
+.expense-note-input {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--bg-elevated) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 12px 16px !important;
+    color: var(--text-primary) !important;
+    font-size: 0.9rem !important;
+    resize: none;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.expense-note-input::placeholder {
+    color: var(--text-muted) !important;
+    font-size: 0.85rem !important;
+}
+
+.expense-note-input:focus {
+    outline: none;
+    border-color: var(--accent-yellow) !important;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2) !important;
+}
+
+/* ============================================
+   ANALYSIS SECTION
+   ============================================ */
+.analysis-page {
+    background: var(--bg-primary);
+    padding-top: 0;
+    padding-bottom: var(--bottom-nav-height);
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+}
+
+.analysis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.analysis-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.analysis-title i {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.close-analysis {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.close-analysis:hover {
+    color: var(--text-primary);
+}
+
+/* Period Tabs */
+.analysis-period-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 0 20px 16px;
+    background: var(--bg-primary);
+}
+
+.period-tab {
+    flex: 1;
+    max-width: 100px;
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.period-tab:first-child {
+    border-radius: var(--radius-full) 0 0 var(--radius-full);
+}
+
+.period-tab:last-child {
+    border-radius: 0 var(--radius-full) var(--radius-full) 0;
+}
+
+.period-tab.active {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+/* Sub-period Navigation */
+.analysis-subperiod {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 8px 20px 16px;
+    overflow-x: auto;
+}
+
+.subperiod-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 8px 0;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.subperiod-btn.active {
+    color: var(--accent-yellow);
+    border-bottom-color: var(--accent-yellow);
+}
+
+.subperiod-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Analysis Content */
+.analysis-content {
+    padding: 16px 20px;
+}
+
+/* Donut Chart Section */
+.analysis-chart-section {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 16px 0;
+}
+
+.donut-chart-container {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    min-width: 140px;
+    max-width: 140px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.donut-chart-container canvas {
+    width: 140px !important;
+    height: 140px !important;
+    max-width: 140px !important;
+    max-height: 140px !important;
+}
+
+.donut-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.donut-center span {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.chart-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.legend-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.legend-item span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+}
+
+.legend-item span:first-child::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-yellow);
+}
+
+.legend-item span:last-child {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Chart Dots */
+.chart-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 0;
+}
+
+.chart-dots .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chart-dots .dot.active {
+    background: var(--text-primary);
+}
+
+.chart-dots .dot:hover {
+    background: var(--text-secondary);
+}
+
+/* Line Chart Section */
+.analysis-line-chart-section {
+    margin-top: 16px;
+}
+
+.line-chart-header {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.line-chart-header strong {
+    color: var(--text-primary);
+}
+
+.line-chart-container {
+    height: 180px;
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.line-chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Category Breakdown */
+.category-breakdown {
+    margin-top: 24px;
+    border-top: 1px solid var(--bg-elevated);
+    padding-top: 16px;
+}
+
+.category-item-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--bg-elevated);
+}
+
+.category-item-row:last-child {
+    border-bottom: none;
+}
+
+.category-item-row.empty-state {
+    justify-content: center;
+    color: var(--text-muted);
+    padding: 32px 0;
+}
+
+.category-item-row .cat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-yellow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.category-item-row .cat-icon i {
+    color: var(--bg-primary);
+    font-size: 1rem;
+}
+
+.category-item-row .cat-info {
+    flex: 1;
+}
+
+.category-item-row .cat-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.category-item-row .cat-percent {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.category-item-row .cat-bar {
+    height: 4px;
+    background: var(--bg-elevated);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.category-item-row .cat-bar-fill {
+    height: 100%;
+    background: var(--accent-yellow);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.category-item-row .cat-amount {
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: right;
+    min-width: 60px;
+}
+
+/* ============================================
+   HIDDEN UTILITY
+   ============================================ */
+.hidden {
+    display: none !important;
+}

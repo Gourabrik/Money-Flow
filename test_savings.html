@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Savings Chart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 min-h-screen py-8">
+    <div class="container mx-auto px-4 max-w-4xl">
+        <h1 class="text-3xl font-bold text-center mb-8 text-purple-700">Savings Chart Test</h1>
+        
+        <!-- Test Controls -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Test Controls</h2>
+            <div class="flex gap-4 flex-wrap">
+                <button id="add-sample" class="bg-green-500 text-white px-4 py-2 rounded">Add Sample Data</button>
+                <button id="clear-data" class="bg-red-500 text-white px-4 py-2 rounded">Clear Data</button>
+                <button id="test-add" class="bg-blue-500 text-white px-4 py-2 rounded">Test Add ₹1000</button>
+                <button id="test-withdraw" class="bg-orange-500 text-white px-4 py-2 rounded">Test Withdraw ₹500</button>
+            </div>
+        </div>
+        
+        <!-- Savings Section -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-center mb-6 text-purple-700">
+                <i class="fas fa-piggy-bank text-yellow-400"></i> Savings Test
+            </h2>
+            <div id="savings-balance" class="text-xl font-bold text-center mb-6">Savings Balance: ₹0.00</div>
+            
+            <div class="flex gap-4 justify-center mb-6">
+                <div>
+                    <input type="number" id="add-savings-amount" class="border rounded px-3 py-2 w-32" placeholder="Add Amount">
+                    <button id="add-savings-btn" class="bg-green-500 text-white px-4 py-2 rounded ml-2">Add</button>
+                </div>
+                <div>
+                    <input type="number" id="withdraw-savings-amount" class="border rounded px-3 py-2 w-32" placeholder="Withdraw Amount">
+                    <button id="withdraw-savings-btn" class="bg-red-500 text-white px-4 py-2 rounded ml-2">Withdraw</button>
+                </div>
+            </div>
+            
+            <div id="savings-message" class="text-center mb-4"></div>
+            
+            <div class="w-full">
+                <h3 class="text-lg font-semibold text-center mb-4">Savings Chart</h3>
+                <canvas id="savings-chart" height="320"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize variables
+        let savings = parseFloat(localStorage.getItem('savings')) || 0;
+        let savingsChartInstance = null;
+        
+        const elements = {
+            savingsBalance: document.getElementById('savings-balance'),
+            addSavingsAmount: document.getElementById('add-savings-amount'),
+            withdrawSavingsAmount: document.getElementById('withdraw-savings-amount'),
+            addSavingsBtn: document.getElementById('add-savings-btn'),
+            withdrawSavingsBtn: document.getElementById('withdraw-savings-btn'),
+            savingsMessage: document.getElementById('savings-message'),
+            savingsChart: document.getElementById('savings-chart')
+        };
+
+        // Sample data
+        function addSampleData() {
+            const sampleData = [
+                { date: '2024-01-01', amount: 1000, type: 'savings-add' },
+                { date: '2024-01-05', amount: 500, type: 'savings-add' },
+                { date: '2024-01-10', amount: 200, type: 'savings-withdraw' },
+                { date: '2024-01-15', amount: 1500, type: 'savings-add' },
+                { date: '2024-01-20', amount: 300, type: 'savings-withdraw' }
+            ];
+            
+            localStorage.setItem('savingsHistory', JSON.stringify(sampleData));
+            savings = sampleData.reduce((total, item) => {
+                return total + (item.type === 'savings-add' ? item.amount : -item.amount);
+            }, 0);
+            localStorage.setItem('savings', savings.toString());
+            updateSavingsUI();
+        }
+
+        function clearData() {
+            localStorage.removeItem('savingsHistory');
+            savings = 0;
+            localStorage.setItem('savings', '0');
+            updateSavingsUI();
+        }
+
+        function testAdd() {
+            handleAddSavings(1000);
+        }
+
+        function testWithdraw() {
+            handleWithdrawSavings(500);
+        }
+
+        function handleAddSavings(amount = null) {
+            const inputAmount = amount || parseFloat(elements.addSavingsAmount.value);
+            if (isNaN(inputAmount) || inputAmount <= 0) {
+                elements.savingsMessage.textContent = 'Please enter a valid amount';
+                return;
+            }
+            
+            savings += inputAmount;
+            localStorage.setItem('savings', savings.toString());
+            
+            let savingsHistory = JSON.parse(localStorage.getItem('savingsHistory')) || [];
+            savingsHistory.push({
+                date: new Date().toISOString().split('T')[0],
+                amount: inputAmount,
+                type: 'savings-add'
+            });
+            localStorage.setItem('savingsHistory', JSON.stringify(savingsHistory));
+            
+            updateSavingsUI();
+            elements.addSavingsAmount.value = '';
+            elements.savingsMessage.textContent = `₹${inputAmount} added successfully!`;
+        }
+
+        function handleWithdrawSavings(amount = null) {
+            const inputAmount = amount || parseFloat(elements.withdrawSavingsAmount.value);
+            if (isNaN(inputAmount) || inputAmount <= 0) {
+                elements.savingsMessage.textContent = 'Please enter a valid amount';
+                return;
+            }
+            if (inputAmount > savings) {
+                elements.savingsMessage.textContent = 'Insufficient balance';
+                return;
+            }
+            
+            savings -= inputAmount;
+            localStorage.setItem('savings', savings.toString());
+            
+            let savingsHistory = JSON.parse(localStorage.getItem('savingsHistory')) || [];
+            savingsHistory.push({
+                date: new Date().toISOString().split('T')[0],
+                amount: inputAmount,
+                type: 'savings-withdraw'
+            });
+            localStorage.setItem('savingsHistory', JSON.stringify(savingsHistory));
+            
+            updateSavingsUI();
+            elements.withdrawSavingsAmount.value = '';
+            elements.savingsMessage.textContent = `₹${inputAmount} withdrawn successfully!`;
+        }
+
+        function updateSavingsUI() {
+            elements.savingsBalance.textContent = `Savings Balance: ₹${savings.toFixed(2)}`;
+            updateSavingsChart();
+        }
+
+        // Include the fixed savings chart function here
+        function updateSavingsChart() {
+            let savingsHistory = JSON.parse(localStorage.getItem('savingsHistory')) || [];
+            
+            if (savingsHistory.length === 0) {
+                if (elements.savingsChart && elements.savingsChart.parentNode) {
+                    elements.savingsChart.parentNode.innerHTML = `
+                        <div class="text-center py-12">
+                            <i class="fas fa-piggy-bank text-6xl text-purple-300 mb-4"></i>
+                            <p class="text-gray-500">No savings data available</p>
+                            <p class="text-sm text-gray-400">Add savings to see your progress</p>
+                        </div>
+                    `;
+                }
+                return;
+            }
+            
+            if (savingsChartInstance) {
+                savingsChartInstance.destroy();
+                savingsChartInstance = null;
+            }
+            
+            if (!elements.savingsChart) return;
+            
+            // Restore canvas if needed
+            if (!elements.savingsChart.getContext) {
+                const canvas = document.createElement('canvas');
+                canvas.id = 'savings-chart';
+                canvas.height = 320;
+                elements.savingsChart.parentNode.replaceChild(canvas, elements.savingsChart);
+                elements.savingsChart = canvas;
+            }
+            
+            const labels = [];
+            const cumulativeData = [];
+            let cumulativeSum = 0;
+            
+            savingsHistory.forEach(item => {
+                const date = new Date(item.date);
+                if (!isNaN(date.getTime())) {
+                    labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                    const amount = item.type === 'savings-add' ? item.amount : -item.amount;
+                    cumulativeSum += amount;
+                    cumulativeData.push(cumulativeSum);
+                }
+            });
+            
+            try {
+                savingsChartInstance = new Chart(elements.savingsChart, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Savings Progress',
+                            data: cumulativeData,
+                            borderColor: '#7C3AED',
+                            backgroundColor: 'rgba(124,58,237,0.2)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 6,
+                            pointBackgroundColor: '#FFFFFF',
+                            pointBorderColor: '#7C3AED',
+                            pointBorderWidth: 3,
+                            pointHoverRadius: 10,
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1500,
+                            easing: 'easeOutCubic'
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#FFFFFF',
+                                bodyColor: '#FFFFFF',
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Balance: ₹' + context.parsed.y.toLocaleString('en-IN');
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                title: { display: true, text: 'Date' }
+                            },
+                            y: {
+                                display: true,
+                                title: { display: true, text: 'Amount (₹)' },
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '₹' + value.toLocaleString('en-IN');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Chart error:', error);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('add-sample').addEventListener('click', addSampleData);
+        document.getElementById('clear-data').addEventListener('click', clearData);
+        document.getElementById('test-add').addEventListener('click', testAdd);
+        document.getElementById('test-withdraw').addEventListener('click', testWithdraw);
+        elements.addSavingsBtn.addEventListener('click', () => handleAddSavings());
+        elements.withdrawSavingsBtn.addEventListener('click', () => handleWithdrawSavings());
+
+        // Initialize
+        updateSavingsUI();
+    </script>
+</body>
+</html>

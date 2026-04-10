@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Flow - Fun Expense Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen pt-28 pb-8">
+    <!-- Animated background elements -->
+    <div class="background-animation">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-pink-50 to-blue-50 border-b border-white/20">
+        <div class="flex items-center justify-between px-6 pb-2 pt-10">
+            <!-- Menu button removed -->
+            <div class="w-8"></div>
+            <h1 class="font-bold tracking-normal">MoneyFlow</h1>
+            <div class="w-8"></div>
+        </div>
+    </nav>
+
+
+    <!-- Menu Overlay -->
+
+
+
+    <div class="container mx-auto px-4 max-w-6xl relative z-10">
+        <!-- Header -->
+        <!-- <div class="header-container text-center mb-12 animate-fade-in">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+               
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Track your expenses, visualize your spending patterns, and take control of your budget with our fun and intuitive expense management system.
+            </p>
+            <div class="text-center mt-2">
+                <span class="font-semibold text-pink-600 text-lg">MADE WITH ❤️ FOR EVERYONE</span>
+            </div>
+        </div> -->
+
+        <!-- Balance Section -->
+        <!-- Balance Section -->
+        <div class="glass-card p-6 md:p-12 mb-8 relative overflow-hidden animate-fade-in">
+            <div class="absolute inset-0 bg-gradient-to-r from-pink-50 to-purple-50 opacity-50"></div>
+            <div class="relative flex justify-between items-start gap-4">
+                <!-- Left Side: Title and Balance -->
+                <div class="flex flex-col gap-2">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-wallet text-pink-500"></i> Total Money
+                    </h2>
+
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-bold mb-1 text-pink-600" id="balance-amount">₹0</div>
+                        <div class="text-sm sm:text-base text-gray-600 font-medium" id="income-display">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                <span class="text-blue-600">Online: ₹<span id="online-income">0</span></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                <span class="text-green-600">Cash: ₹<span id="cash-income">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Action Buttons -->
+                <div class="flex flex-col gap-3 mt-1">
+                    <button id="add-income-btn"
+                        class="btn btn-success flex items-center justify-center gap-2 text-xs font-semibold px-4 py-2 uppercase tracking-wide shadow-sm w-full whitespace-nowrap">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                    <button id="reset-data-btn"
+                        class="btn btn-danger flex items-center justify-center gap-2 text-xs font-semibold px-4 py-2 uppercase tracking-wide shadow-sm w-full whitespace-nowrap">
+                        <i class="fas fa-trash-alt"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tabs -->
+        <div class="glass-card mb-8 overflow-hidden animate-fade-in">
+            <div class="flex flex-nowrap justify-between border-b border-gray-200 pb-2 gap-1 overflow-x-auto px-2">
+                <button id="daily-tab" class="tab-button active flex-1 whitespace-nowrap text-center"
+                    onclick="switchTab('daily')">
+                    <i class="fas fa-calendar-day"></i> Daily
+                </button>
+                <button id="monthly-tab" class="tab-button flex-1 whitespace-nowrap text-center"
+                    onclick="switchTab('monthly')">
+                    <i class="fas fa-calendar-alt"></i> Monthly
+                </button>
+                <button id="heatmap-tab" class="tab-button flex-1 whitespace-nowrap text-center"
+                    onclick="switchTab('heatmap')">
+                    <i class="fas fa-fire"></i> Heatmap
+                </button>
+                <button id="insights-tab" class="tab-button flex-1 whitespace-nowrap text-center"
+                    onclick="switchTab('insights')">
+                    <i class="fas fa-lightbulb"></i> Insights
+                </button>
+            </div>
+
+            <!-- Daily Report -->
+            <div id="daily-report" class="p-6">
+                <h3 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-pink-500"></i> Today's Expenses - <span id="today-date"
+                        class="text-pink-600"></span>
+                </h3>
+                <div class="space-y-4" id="daily-expenses-list">
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fas fa-receipt text-4xl mb-3 opacity-50"></i>
+                        <p>No expenses recorded today</p>
+                        <p class="text-sm mt-2">Click the + button to add your first expense!</p>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-pink-50 rounded-lg flex justify-between items-center">
+                    <span class="font-semibold text-lg">Daily Total:</span>
+                    <span class="text-xl font-bold text-red-500" id="daily-total">₹0.00</span>
+                </div>
+            </div>
+
+            <!-- Monthly Report -->
+            <div id="monthly-report" class="p-6 hidden">
+                <h3 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <i class="fas fa-chart-pie text-purple-500"></i> Monthly Summary - <span id="current-month"
+                        class="text-purple-600"></span>
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" id="monthly-categories">
+                    <!-- Category totals will be populated here -->
+                </div>
+
+                <div class="p-4 bg-purple-50 rounded-lg flex justify-between items-center">
+                    <span class="font-semibold text-lg">Monthly Total:</span>
+                    <span class="text-xl font-bold text-red-500" id="monthly-total">₹0.00</span>
+                </div>
+            </div>
+
+            <!-- Heatmap Calendar -->
+            <div id="heatmap-report" class="p-6 hidden">
+                <h3 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <i class="fas fa-fire text-orange-500"></i> Expense Heatmap Calendar
+                </h3>
+                <div class="mb-4 flex justify-between items-center">
+                    <button id="prev-month-heatmap" class="btn btn-secondary flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <h4 id="heatmap-month-year" class="text-lg font-semibold"></h4>
+                    <button id="next-month-heatmap" class="btn btn-secondary flex items-center gap-2">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="heatmap-calendar">
+                    <div class="heatmap-weekdays grid grid-cols-7 gap-1 mb-2">
+                        <div class="text-center text-sm font-medium text-gray-600 py-2 w-10">Sun</div>
+                        <div class="text-center text-sm font-medium text-gray-600 py-2 w-10">Mon</div>
+                        <div class="text-center text-sm font-medium text-gray-600 py-2 w-10">Tue</div>
+                        <div class="text-center text-sm font-medium text-gray-600 py-2 w-10">Wed</div>
+                        <div class="text-center text-sm font-medium text-gray-600 py-2 w-10">Thu</div>
+                        <div class="text-center text-sm font-medium text-gray-600 py-2 w-10">Fri</div>
+                        <div class="text-center text-sm font-medium text-gray-600 py-2 w-10">Sat</div>
+                    </div>
+                    <div id="heatmap-days" class="grid grid-cols-7 gap-1"></div>
+                </div>
+                <div class="mt-6 p-4 bg-orange-50 rounded-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="font-semibold">Heatmap Legend:</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm">Low</span>
+                        <div class="flex gap-1">
+                            <div class="w-4 h-4 bg-[#dcfce7] rounded-sm" title="Minimal expenses"></div>
+                            <div class="w-4 h-4 bg-[#bbf7d0] rounded-sm" title="Moderate expenses"></div>
+                            <div class="w-4 h-4 bg-[#fef08a] rounded-sm" title="Slightly high expenses"></div>
+                            <div class="w-4 h-4 bg-[#fde047] rounded-sm" title="More high expenses"></div>
+                            <div class="w-4 h-4 bg-[#facc15] rounded-sm" title="Very high expenses"></div>
+                            <div class="w-4 h-4 bg-[#f87171] rounded-sm" title="Extreme expenses"></div>
+                        </div>
+                        <span class="text-sm">High</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights Dashboard -->
+            <div id="insights-report" class="p-6 hidden">
+                <h3 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <i class="fas fa-lightbulb text-yellow-500"></i> Spending Insights Dashboard
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Average Daily Spending -->
+                    <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-calendar-day text-blue-500 text-xl"></i>
+                            <h4 class="font-semibold text-blue-800">Avg Daily Spending</h4>
+                        </div>
+                        <p class="text-2xl font-bold text-blue-600" id="avg-daily-spending">₹0.00</p>
+                        <p class="text-sm text-blue-600">Last 30 days</p>
+                    </div>
+
+                    <!-- Top Category -->
+                    <div class="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-trophy text-green-500 text-xl"></i>
+                            <h4 class="font-semibold text-green-800">Top Category</h4>
+                        </div>
+                        <p class="text-xl font-bold text-green-600" id="top-category">None</p>
+                        <p class="text-sm text-green-600" id="top-category-amount">₹0.00</p>
+                    </div>
+
+                    <!-- Financial Health Score -->
+                    <div class="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-heartbeat text-purple-500 text-xl"></i>
+                            <h4 class="font-semibold text-purple-800">Financial Health</h4>
+                        </div>
+                        <p class="text-2xl font-bold text-purple-600" id="health-score">0/100</p>
+                        <p class="text-sm text-purple-600" id="health-status">Poor</p>
+                    </div>
+
+                    <!-- Savings Rate -->
+                    <div class="bg-gradient-to-r from-pink-50 to-pink-100 p-4 rounded-lg border border-pink-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-piggy-bank text-pink-500 text-xl"></i>
+                            <h4 class="font-semibold text-pink-800">Savings Rate</h4>
+                        </div>
+                        <p class="text-2xl font-bold text-pink-600" id="savings-rate">0%</p>
+                        <p class="text-sm text-pink-600">Income vs Expenses</p>
+                    </div>
+
+                    <!-- Expense Trend -->
+                    <div class="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-chart-line text-orange-500 text-xl"></i>
+                            <h4 class="font-semibold text-orange-800">Monthly Trend</h4>
+                        </div>
+                        <p class="text-xl font-bold text-orange-600" id="expense-trend">Stable</p>
+                        <p class="text-sm text-orange-600" id="trend-percentage">0% change</p>
+                    </div>
+
+                    <!-- Budget Status -->
+                    <div class="bg-gradient-to-r from-teal-50 to-teal-100 p-4 rounded-lg border border-teal-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-target text-teal-500 text-xl"></i>
+                            <h4 class="font-semibold text-teal-800">Budget Status</h4>
+                        </div>
+                        <p class="text-xl font-bold text-teal-600" id="budget-status">No Budget Set</p>
+                        <p class="text-sm text-teal-600" id="budget-details">-</p>
+                    </div>
+                </div>
+
+                <!-- Insights Summary -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-yellow-500"></i> Key Insights
+                    </h4>
+                    <ul class="space-y-2 text-sm text-gray-700" id="insights-list">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+                            <span>Loading insights...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Section with Tabs -->
+        <div class="glass-card mb-8 overflow-hidden animate-fade-in">
+            <div class="flex justify-center border-b border-gray-200 pb-2 gap-1">
+                <button id="analytics-tab"
+                    class="analytics-tab-button active text-xs sm:text-sm px-2 sm:px-3 py-2 rounded-lg border-2 border-purple-500 bg-purple-500 text-white font-medium flex items-center gap-1">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </button>
+                <button id="history-tab"
+                    class="analytics-tab-button text-xs sm:text-sm px-2 sm:px-3 py-2 rounded-lg border-2 border-blue-300 bg-white text-blue-600 hover:bg-blue-50 font-medium flex items-center gap-1">
+                    <i class="fas fa-history"></i> History
+                </button>
+                <button id="ai-tab"
+                    class="analytics-tab-button text-xs sm:text-sm px-2 sm:px-3 py-2 rounded-lg border-2 border-green-300 bg-white text-green-600 hover:bg-green-50 font-medium flex items-center gap-1">
+                    <i class="fas fa-robot"></i> AI Assistant
+                </button>
+            </div>
+
+            <!-- Expense Analytics Tab -->
+            <div id="analytics-content" class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-purple-500"></i> Expense Analytics
+                    </h2>
+                    <div class="flex gap-2">
+                        <button id="daily-chart-btn"
+                            class="px-3 py-2 bg-pink-500 text-white rounded-full text-sm font-medium transition-colors flex items-center gap-1">
+                            <i class="fas fa-sun"></i> Daily
+                        </button>
+                        <button id="monthly-chart-btn"
+                            class="px-3 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium transition-colors flex items-center gap-1">
+                            <i class="fas fa-moon"></i> Monthly
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container relative">
+                    <canvas id="expense-chart"></canvas>
+                    <div id="chart-empty" class="absolute inset-0 flex items-center justify-center hidden">
+                        <div class="text-center text-gray-500">
+                            <i class="fas fa-chart-pie text-4xl mb-3 opacity-50"></i>
+                            <p>No data available for chart</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price History Tab -->
+            <div id="history-content" class="p-6 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-history text-blue-500"></i> Price History
+                    </h2>
+                    <button id="download-pdf-btn" class="btn btn-success flex items-center gap-2">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                </div>
+                <div class="chart-container relative">
+                    <canvas id="price-history-chart"></canvas>
+                    <div id="history-chart-empty" class="absolute inset-0 flex items-center justify-center hidden">
+                        <div class="text-center text-gray-500">
+                            <i class="fas fa-chart-line text-4xl mb-3 opacity-50"></i>
+                            <p>No data available for price history</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 overflow-x-auto max-h-96 overflow-y-auto">
+                    <table id="history-table" class="min-w-full bg-white rounded-lg overflow-hidden hidden">
+                        <thead class="bg-gray-100 sticky top-0">
+                            <tr>
+                                <th class="py-2 px-4 text-left">Date</th>
+                                <th class="py-2 px-4 text-left">Type</th>
+                                <th class="py-2 px-4 text-left">Description</th>
+                                <th class="py-2 px-4 text-right">Amount (₹)</th>
+                                <th class="py-2 px-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <!-- History data will be populated here -->
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-4">
+                        <button id="show-more-btn" class="btn btn-secondary hidden">
+                            <i class="fas fa-chevron-down"></i> Show More
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Finance Assistant Tab -->
+            <div id="ai-content" class="p-6 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-robot text-blue-500"></i> AI Finance Assistant
+                    </h2>
+                    <button id="refresh-ai-analysis" class="btn btn-success flex items-center gap-2">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="chart-container relative" id="ai-analysis-content">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center text-gray-500">
+                                <i class="fas fa-brain text-4xl mb-3 opacity-50"></i>
+                                <p>AI analysis will appear here after you add expenses</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Combined Debt Management & Savings Section -->
+        <div class="glass-card mb-8 overflow-hidden animate-fade-in" id="debt-savings-section">
+            <!-- Tab Buttons -->
+            <!-- Tab Buttons -->
+            <div class="flex flex-nowrap justify-between border-b border-gray-200 pb-2 gap-1 overflow-x-auto px-2">
+                <button id="debt-tab"
+                    class="debt-savings-tab active flex-1 whitespace-nowrap text-center text-sm px-2 py-2 rounded-lg bg-red-500 text-white font-medium flex items-center justify-center gap-1 focus:outline-none">
+                    <i class="fas fa-credit-card"></i> Debt
+                </button>
+                <button id="savings-tab"
+                    class="debt-savings-tab flex-1 whitespace-nowrap text-center text-sm px-2 py-2 rounded-lg bg-white text-purple-600 hover:bg-purple-50 font-medium flex items-center justify-center gap-1 focus:outline-none">
+                    <i class="fas fa-piggy-bank"></i> Savings
+                </button>
+                <button id="analysis-tab"
+                    class="debt-savings-tab flex-1 whitespace-nowrap text-center text-sm px-2 py-2 rounded-lg bg-white text-blue-600 hover:bg-blue-50 font-medium flex items-center justify-center gap-1 focus:outline-none">
+                    <i class="fas fa-chart-line"></i> Analysis
+                </button>
+            </div>
+
+            <!-- Debt Management Tab -->
+            <div id="debt-content" class="p-6">
+                <div class="text-center mb-6">
+                    <div id="total-debt" class="text-4xl font-bold text-red-600 mb-2">₹0.00</div>
+                    <p class="text-gray-600">Total Outstanding Debt</p>
+                </div>
+
+                <!-- Add Debt Form -->
+                <div class="glass-card p-6 mb-6 bg-gradient-to-r from-red-50 to-orange-50">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-plus text-red-500"></i> Add New Debt
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <input type="number" id="debt-amount"
+                            class="px-4 py-3 border border-red-300 rounded-full focus:ring-2 focus:ring-red-500"
+                            placeholder="Debt Amount (₹)">
+                        <input type="text" id="debt-description"
+                            class="px-4 py-3 border border-red-300 rounded-full focus:ring-2 focus:ring-red-500"
+                            placeholder="Description (e.g., Credit Card, Loan)">
+                        <input type="date" id="debt-due-date"
+                            class="px-4 py-3 border border-red-300 rounded-full focus:ring-2 focus:ring-red-500">
+                        <button id="add-debt-btn" class="btn btn-danger flex items-center justify-center gap-2">
+                            <i class="fas fa-plus"></i> Add Debt
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Debt List -->
+                <div id="debt-list" class="space-y-4 mb-6"></div>
+                <div id="debt-message" class="text-center mb-4 text-lg"></div>
+            </div>
+
+            <!-- Savings Tab -->
+            <div id="savings-content" class="p-6 hidden">
+                <div class="text-center mb-6">
+                    <div id="savings-balance" class="text-4xl font-bold text-purple-600 mb-2">₹0.00</div>
+                    <p class="text-gray-600">Total Savings Balance</p>
+                </div>
+
+                <!-- Savings Goals Tracker -->
+                <div class="glass-card p-4 mb-6 bg-gradient-to-r from-purple-50 to-pink-50">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-bullseye text-purple-500"></i> Savings Goals
+                    </h3>
+
+                    <div class="flex gap-4 flex-wrap mb-4">
+                        <input type="number" id="goal-amount"
+                            class="flex-1 min-w-40 px-4 py-3 border border-purple-300 rounded-full focus:ring-2 focus:ring-purple-500"
+                            placeholder="Goal Amount (₹)">
+                        <input type="text" id="goal-description"
+                            class="flex-1 min-w-60 px-4 py-3 border border-purple-300 rounded-full focus:ring-2 focus:ring-purple-500"
+                            placeholder="Goal Description (e.g., Vacation, Emergency Fund)">
+                        <input type="date" id="goal-date"
+                            class="flex-1 min-w-40 px-4 py-3 border border-purple-300 rounded-full focus:ring-2 focus:ring-purple-500">
+                        <button id="add-goal-btn" class="btn btn-primary flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Add Goal
+                        </button>
+                    </div>
+
+                    <div id="goals-list" class="space-y-4"></div>
+
+                    <div id="achievements" class="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200 hidden">
+                        <h4 class="font-semibold text-yellow-800 mb-2 flex items-center gap-2">
+                            <i class="fas fa-trophy text-yellow-600"></i> Achievements
+                        </h4>
+                        <div id="achievements-list" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <input type="number" id="add-savings-amount"
+                        class="px-4 py-3 rounded-full border border-pink-300 focus:ring-2 focus:ring-pink-500 transition-all duration-300"
+                        placeholder="Amount to Add">
+                    <button id="add-savings-btn" class="btn btn-success flex items-center justify-center gap-2">
+                        <i class="fas fa-plus"></i> Add Savings
+                    </button>
+                    <input type="number" id="withdraw-savings-amount"
+                        class="px-4 py-3 rounded-full border border-red-300 focus:ring-2 focus:ring-red-500 transition-all duration-300"
+                        placeholder="Amount to Withdraw">
+                    <button id="withdraw-savings-btn" class="btn btn-danger flex items-center justify-center gap-2">
+                        <i class="fas fa-minus"></i> Withdraw
+                    </button>
+                </div>
+
+                <div id="savings-message" class="text-red-500 text-center mb-4 text-lg"></div>
+
+                <div class="flex justify-center">
+                    <button id="reset-savings-btn" class="btn btn-danger flex items-center justify-center gap-2">
+                        <i class="fas fa-trash"></i> Reset Savings
+                    </button>
+                </div>
+            </div>
+
+            <!-- Analysis Tab -->
+            <div id="analysis-content" class="p-6 hidden">
+                <h3 class="font-semibold text-gray-700 mb-4 flex items-center gap-2 text-xl">
+                    <i class="fas fa-chart-line text-blue-500"></i> Savings Analysis
+                </h3>
+                <div class="chart-container relative" style="height: 400px; width: 100%;">
+                    <canvas id="savings-chart"></canvas>
+                    <div id="savings-chart-empty" class="absolute inset-0 flex items-center justify-center hidden">
+                        <div class="text-center text-gray-500">
+                            <i class="fas fa-piggy-bank text-4xl mb-3 opacity-50"></i>
+                            <p>No savings data available</p>
+                            <p class="text-sm mt-2">Add savings to see your progress</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+
+    <!-- Floating Add Button -->
+    <button id="add-expense-btn" class="floating-button" aria-label="Add Expense">
+        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEh2CqZMcqj-l1DpDZE6OmIMFQezcQ6W8lwIZ4EajU6AxiFv71h-hXy7v78eyBduEZB_D2Ye7lNMzXldi0DSpVWbN73uDSPOWVvp1Fe0J5CimpxdtstBnjY44-dBNyhzT1OgMLPvUSa0ros_HlDUOLDMjXaoi08AqRdqPjKmltNmLCztH7rgA2vko8w6Hgru"
+            alt="Add" class="w-16 h-16">
+    </button>
+
+    <!-- Add Expense Modal -->
+    <div id="expense-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden modal">
+        <div class="glass-card p-6 w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold flex items-center gap-2">
+                    <i class="fas fa-receipt text-pink-500"></i> Add Expense
+                </h2>
+                <button class="text-gray-500 hover:text-gray-700 text-xl" onclick="hideModal('expense')"
+                    aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="expense-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">💳 Payment Method</label>
+                    <div class="payment-method-toggle">
+                        <button type="button" id="expense-payment-online" class="payment-method-btn online active"
+                            onclick="selectPaymentMethod('online')">
+                            <i class="fas fa-credit-card"></i> Online
+                        </button>
+                        <button type="button" id="expense-payment-cash" class="payment-method-btn cash"
+                            onclick="selectPaymentMethod('cash')">
+                            <i class="fas fa-money-bill-wave"></i> Cash
+                        </button>
+                    </div>
+                    <input type="hidden" id="expense-payment-method" value="online">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">📅 Date</label>
+                    <input type="date" id="expense-date" class="w-full" required aria-label="Expense Date">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">💰 Amount</label>
+                    <input type="number" id="expense-amount" step="0.01" min="0.01" class="w-full" placeholder="0.00"
+                        required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-3">🏷️ Category</label>
+                    <div class="category-grid" id="category-grid">
+                        <button type="button" class="category-item active" data-category="Shopping"
+                            onclick="selectCategory('Shopping')">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Shopping</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Food"
+                            onclick="selectCategory('Food')">
+                            <i class="fas fa-utensils"></i>
+                            <span>Food</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Phone"
+                            onclick="selectCategory('Phone')">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Phone</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Entertainment"
+                            onclick="selectCategory('Entertainment')">
+                            <i class="fas fa-tv"></i>
+                            <span>Entertainment</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Education"
+                            onclick="selectCategory('Education')">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Education</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Beauty"
+                            onclick="selectCategory('Beauty')">
+                            <i class="fas fa-cut"></i>
+                            <span>Beauty</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Sports"
+                            onclick="selectCategory('Sports')">
+                            <i class="fas fa-running"></i>
+                            <span>Sports</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Social"
+                            onclick="selectCategory('Social')">
+                            <i class="fas fa-users"></i>
+                            <span>Social</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Transportation"
+                            onclick="selectCategory('Transportation')">
+                            <i class="fas fa-bus"></i>
+                            <span>Transport</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Clothing"
+                            onclick="selectCategory('Clothing')">
+                            <i class="fas fa-tshirt"></i>
+                            <span>Clothing</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Car" onclick="selectCategory('Car')">
+                            <i class="fas fa-car"></i>
+                            <span>Car</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Alcohol"
+                            onclick="selectCategory('Alcohol')">
+                            <i class="fas fa-wine-glass-alt"></i>
+                            <span>Alcohol</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Electronics"
+                            onclick="selectCategory('Electronics')">
+                            <i class="fas fa-laptop"></i>
+                            <span>Electronics</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Travel"
+                            onclick="selectCategory('Travel')">
+                            <i class="fas fa-plane"></i>
+                            <span>Travel</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Health"
+                            onclick="selectCategory('Health')">
+                            <i class="fas fa-heartbeat"></i>
+                            <span>Health</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Pets"
+                            onclick="selectCategory('Pets')">
+                            <i class="fas fa-paw"></i>
+                            <span>Pets</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Repairs"
+                            onclick="selectCategory('Repairs')">
+                            <i class="fas fa-wrench"></i>
+                            <span>Repairs</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Housing"
+                            onclick="selectCategory('Housing')">
+                            <i class="fas fa-home"></i>
+                            <span>Housing</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Gifts"
+                            onclick="selectCategory('Gifts')">
+                            <i class="fas fa-gift"></i>
+                            <span>Gifts</span>
+                        </button>
+                        <button type="button" class="category-item" data-category="Bills"
+                            onclick="selectCategory('Bills')">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Bills</span>
+                        </button>
+                    </div>
+                    <input type="hidden" id="expense-category" value="Shopping">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">📝 Note (Optional)</label>
+                    <textarea id="expense-note" class="w-full expense-note-input" rows="2"
+                        placeholder="Add a note..."></textarea>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="hideModal('expense')" class="flex-1 btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 btn btn-primary">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Income Modal -->
+    <div id="income-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden modal">
+        <div class="glass-card p-6 w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold flex items-center gap-2">
+                    <i class="fas fa-arrow-down text-green-500"></i> Add Income
+                </h2>
+                <button class="text-gray-500 hover:text-gray-700 text-xl" onclick="hideModal('income')"
+                    aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Income Type Selection -->
+            <div class="flex gap-3 mb-6">
+                <button id="online-income-btn"
+                    class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-full font-semibold transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-credit-card"></i> Online
+                </button>
+                <button id="cash-income-btn"
+                    class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-full font-semibold transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-money-bill-wave"></i> Cash
+                </button>
+            </div>
+
+            <form id="income-form" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-sm font-medium mb-2">💰 Amount</label>
+                    <input type="number" id="income-amount" step="0.01" min="0.01" class="w-full" placeholder="0.00"
+                        required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">📋 Source (Optional)</label>
+                    <input type="text" id="income-source" class="w-full" placeholder="Salary, Bonus, Freelance, etc.">
+                </div>
+                <input type="hidden" id="income-type" value="">
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="hideModal('income')" class="flex-1 btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 btn btn-success">
+                        <i class="fas fa-plus-circle"></i> Add Income
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Removed -->
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <button class="bottom-nav-item active" onclick="navigateToSection('balance')" data-section="records">
+            <i class="fas fa-list-alt"></i>
+            <span>Records</span>
+        </button>
+        <button class="bottom-nav-item" onclick="switchAnalyticsTab('analytics'); navigateToSection('analytics')"
+            data-section="charts">
+            <i class="fas fa-chart-pie"></i>
+            <span>Analysis</span>
+        </button>
+        <button class="fab-button" id="fab-add-expense" aria-label="Add Expense">
+            <i class="fas fa-plus"></i>
+        </button>
+        <button class="bottom-nav-item" onclick="navigateToSection('savings')" data-section="savings">
+            <i class="fas fa-piggy-bank"></i>
+            <span>Savings</span>
+        </button>
+        <button class="bottom-nav-item" onclick="navigateToSection('history')" data-section="me">
+            <i class="fas fa-history"></i>
+            <span>Me</span>
+        </button>
+    </nav>
+
+    <script>
+        // Check if user has already logged in (for demo purposes, we'll use localStorage)
+        window.addEventListener('DOMContentLoaded', function () {
+            const hasLoggedIn = localStorage.getItem('moneyflow_loggedin');
+            if (!hasLoggedIn) {
+                // Redirect to login page if user hasn't logged in
+                window.location.href = 'login.html';
+            } else {
+                // Initialize the app if user has logged in
+                init();
+            }
+        });
+    </script>
+    <script src="script.js?v=2.0"></script>
+</body>
+
+</html>
