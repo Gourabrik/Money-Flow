@@ -1,8 +1,8 @@
 # Money Flow
 
-## A Modern Personal Finance Dashboard
+## A Modern Personal Finance Application
 
-Money Flow is a polished browser-based solution for personal financial management. Designed to deliver fast, secure tracking for expenses, income, savings, and goals, it keeps all data locally in the browser and removes the need for server-side infrastructure.
+Money Flow is a polished solution for personal financial management. Designed to deliver fast, secure tracking for expenses, income, savings, and goals, it keeps all data locally in the browser and removes the need for server-side infrastructure.
 
 This project combines a clean interface with built-in analytics, visual reporting, and a lightweight architecture that makes it ideal for individuals seeking an accessible expense tracker without backend complexity.
 
